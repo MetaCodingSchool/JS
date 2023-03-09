@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+</head>
+<body>
+    <div id="mydiv" style="width: 100px; background-color: red; height: 100px;"></div>
+
+    <script>
+        function changeStyle(){
+            var element = document.getElementById('mydiv')
+            element.style.width='400px';
+        };
+    </script>
+    <button onclick="changeStyle()">Сделать контейнер шире</button>
+
+    <button onclick="document.getElementById('mydiv').style.width='100px'">Вернуть стандартный размер</button>
+    
+</body>
+</html>

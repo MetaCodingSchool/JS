@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        const templateJson={
+            // user:{
+            //     name:'Nurlybek',
+            //     username:'Mussin',
+            //     email:'text@gmail.com',
+            // },
+            project_name:'Website',
+            admin_email:'text@gmail.com',
+            form_subject:'Form submit'
+        }
+
+        const templateDefultResponse = JSON.stringify(templateJson);
+        const parseResponse =JSON.parse(templateDefultResponse);
+        console.log('extra objects parametrs:', parseResponse.user.name)
+
+        function new__info(){
+            const xhttp= new XMLHttpRequest();
+            xhttp.onload = function(){
+                const response =JSON.parse(this.response);
+                console.log(response)
+                const htmlCodeToRenser=`
+                    <div>
+                        <img src='${response.data.avatar}' width="100px" height="100px" style="border-radius:50px" >
+                        <p>${response.data.id}</p> 
+                        <p>${response.data.first__name} ${response.data.last__name}</p>
+                        <p>${response.data.email}</p>    
+                    </div>
+                `;
+                document.getElementById('content').innerHTML=htmlCodeToRenser;
+            };
+            xhttp.open('GET','https://reqres.in/api/users/2');
+            xhttp.send();
+        }
+    </script>
+
+    <div id="demo">
+        <h2 id="content">Пример работы AJAX</h2>
+        <button type="button" onclick="new__info()">Поменять контент div-ки</button>
+    </div>
+</body>
+</html>

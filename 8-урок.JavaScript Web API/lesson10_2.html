@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+
+    <style>
+        table,
+        th,
+        td{
+            border: 1px solid black;
+        }
+        th,
+        td{
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
+
+    <script>
+        function new__info(){
+            const xhttp= new XMLHttpRequest();
+            xhttp.onload = function(){
+                const response =JSON.parse(this.response);
+                const btcToUSDPrice=Number(document.getElementById('btc_price').innerHTML);
+
+                function formatDataToList(){
+                    return response.coins
+                        .map(({ item }) => {
+                            return `
+                            <div>
+                                <tr>
+                                    <td>
+                                        <img src="${item.small}" width="100px" height="100px" style="border-radius:8px" >
+                                    </td>
+                                    <td>${item.symbol.toString()}</td>
+                                    <td>${item.name.toString()}</td>
+                                    <td>${(Number(item.price_btc.toString()).toFixed(7))}</td>
+                                    <td>${(Number(btcToUSDPrice * item.price_btc).toFixed(7))}</td>
+                                </tr>
+                            </div>`;
+                        })
+                        .join('');
+                }
+
+                const htmlCodeToRenser=`
+                    <div>
+                        <table>
+                            <tr>
+                                <th>Icon</th>
+                                <th>Symbol</th>
+                                <th>Name</th>
+                                <th>Price per BTC</th>
+                                <th>Price per USD</th>
+                            </tr>
+                            ${formatDataToList()}
+                        </table>
+                    </div>
+                `;
+
+                document.getElementById('content').innerHTML=htmlCodeToRenser;
+            };
+
+            xhttp.open('GET','https://api.coingecko.com/api/v3/search/trending');
+            xhttp.setRequestHeader('Accept', 'application/json');
+            xhttp.send();
+        }
+
+        function renderWebsite(){
+            const xhttp= new XMLHttpRequest();
+            xhttp.onload = function(){
+                const response =JSON.parse(this.response);
+                document.getElementById('btc_price').innerHTML=response.bitcoin.usd;
+            };
+            xhttp.open('GET','https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd');
+            xhttp.setRequestHeader('Accept', 'application/json');
+            xhttp.send();
+        }
+
+        renderWebsite();
+    </script>
+</head>
+
+<body>
+    
+
+    <div id="demo">
+        <h2 id="price_title">BTC/USD Price:</h2>
+        <h2 id="btc_price">0 USD</h2>
+        <br>
+        <h2 id="content">Top 7 trendig coint</h2>
+        <button type="button" onclick="new__info()">Прогрузить актуальные криптовалюты</button>
+    </div>
+</body>
+</html>
